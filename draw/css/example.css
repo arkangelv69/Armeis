@@ -1,1 +1,50 @@
 /*Css de ejemplo*/
+body{
+	margin:0;
+	padding:0;
+}
+#wrapper{
+	width:98%;
+	padding:1%;
+	height:600px;
+}
+#commonTools{
+	height:50px;
+	background-color:#FF0000;
+}
+#drawTools{
+	width:10%;
+	height:550px;
+	float:left;
+	background-color:#01DF01;
+}
+#wrapperCenterArea{
+	width:70%;
+	float:left;
+	height:550px;
+}
+#propertyTools{
+	height:50px;
+	background-color:#0080FF;
+}
+#wrapperWorkArea{
+	width:96%;
+	height:430px;
+	background-color:#E6E6E6;
+	padding:10px 2%;
+}
+#workArea{
+	background-color:#D8D8D8;
+	border:1px solid #000;
+	height:430px;
+}
+#timeLine{
+	height:50px;
+	background-color:#0489B1;
+}
+#controlTools{
+	width:20%;
+	height:550px;
+	float:left;
+	background-color:#F3F781;
+}
