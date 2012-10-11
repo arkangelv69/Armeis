@@ -55,10 +55,15 @@ body{
 	top: 12px;
 	left: -1000px;
 }
-#move1{
+#move2{
 	position:absolute;
-	top: 62px;
-	left: -1000px;
+	top: 72px;
+	left: -2000px;
+}
+#move3{
+	position:absolute;
+	top: 136px;
+	left: -3000px;
 }
 #workArea h2{
 position: absolute;
