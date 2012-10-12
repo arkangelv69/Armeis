@@ -2,8 +2,8 @@
 var funcionInicio = function ($){
 	var draw = new Object;
 	draw = {
-			titulos:9,
-			dobleColumna: true,
+			titulos:6,
+			dobleColumna: false,
 			colorFondo:{
 				"fill":"0-#fff-#f00:20-#000",
 				"stroke":"#000",
