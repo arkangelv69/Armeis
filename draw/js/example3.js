@@ -53,6 +53,7 @@ var funcionInicio = function ($){
 					layers.layerActual = $( "#itemLayers li.new" ).data('layer')-1;
 					$( "#itemLayers li" ).removeClass('new');
 					layers.numLayers++;
+					$('#itemLayers li').off();
 					events.eventsMouse.controlOrderLayer();
 					events.eventsMouse.controlSelectLayer();
 				});	
@@ -80,9 +81,28 @@ var funcionInicio = function ($){
 			},
 			controlSelectLayer:function(){
 				$('#itemLayers li').click(function(){
-					layers.layerActual = $(this).data('layer')-1;
-					$('#itemLayers li').removeClass('selected');
-					$(this).addClass( 'selected' );
+					if(jQuery(this).hasClass( 'selected')){
+						var objetos = $( "#objeto" ).children();
+						objetos.removeAttr('class');
+						jQuery(this).removeClass('selected');
+					}
+					else{
+						layers.layerActual = $(this).data('layer')-1;
+						$('#itemLayers li').removeClass('selected');
+						$(this).addClass( 'selected' );
+
+						var objetos = $( "#objeto" ).children();
+						var lengthObjetos = objetos.length;
+						var dataCapa = $(this).data('layer');
+						objetos.removeAttr('class');
+						for(var e=0; e<lengthObjetos; e++){
+							var dataObjeto = objetos.eq(e).data('layer');
+							if(dataObjeto == dataCapa){
+								objetos.eq(e).attr('class','selected');
+								//objetos.eq(e).css('zIndex',500*(lengthObjetos+1));
+							}
+						};
+					}
 				});
 			}
 		},
