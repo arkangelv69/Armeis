@@ -6,14 +6,16 @@
 		
 		<!-- Script -->
 		<script src="../lib/jquery/jquery.js" type="text/javascript"></script>
-		<script src="../lib/jqueryUI/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+		<!--<script src="../lib/jqueryUI/js/jquery-1.8.2.min.js" type="text/javascript"></script>-->
+		<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js" type="text/javascript"></script>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
 		<script src="../lib/raphael/raphael.js"type="text/javascript"></script>
 		
 		<script src="../js/example3.js"type="text/javascript"></script>
 		<!-- Estilos -->
 		<link rel="stylesheet" href="../css/example.css" />
-		<link rel="stylesheet" href="../lib/jqueryUI/css/redmond/jquery-ui-1.8.24.custom.css" />
+		<!--<link rel="stylesheet" href="../lib/jqueryUI/css/redmond/jquery-ui-1.8.24.custom.css" />-->
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
 		
 	</head>
 	<body>
@@ -35,8 +37,11 @@
 				<div id="timeLine"></div>
 			</div>
 			<div id="controlTools">
-				<div id="Layer">
+				<div id="Layers">
 					<button id="addLayer">Add Capa</button>
+					<ul id="itemLayers">
+					    <li class="ui-state-default layer1 selected"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Capa 1</li>
+					</ul>
 				</div>
 			</div>
 		</div>

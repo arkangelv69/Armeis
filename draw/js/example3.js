@@ -6,7 +6,9 @@ var funcionInicio = function ($){
 	};
 	var layers = new Object;
 	layers = {
-		layerActual:{}
+		numLayers:1,
+		paper:[],
+		layerActual:0
 	};
 	var events = new Object;
 	events = {
@@ -37,13 +39,51 @@ var funcionInicio = function ($){
 					events.eventsDraw[events.select]();
 				});	
 			},
-			drawAddLayer:function(){
+			controlAddLayer:function(){
 				$('#addLayer').click(function(){
-					events.select = 'addLayer';
-					$(area.targetDiv).off();
-					$(area.targetDiv+' path').off();
-					events.eventsDraw[events.select]();
+					var numero = $( "#itemLayers li" ).length + 1;
+					layers.paper.push(Raphael('objeto',800, 430));
+					longObject = $( "#objeto" ).children().length;
+					for(var i=0; i<longObject; i++){
+						$( "#objeto" ).children().eq(longObject-(i+1)).data('layer',i+1);
+					}
+					lista = $('<li class="ui-state-default layer'+numero+' new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Capa '+numero+'</li>');
+					$( "#itemLayers" ).append(lista);
+					$( "#itemLayers li.new" ).data('layer',layers.numLayers);
+					layers.layerActual = $( "#itemLayers li.new" ).data('layer')-1;
+					$( "#itemLayers li" ).removeClass('new');
+					layers.numLayers++;
+					events.eventsMouse.controlOrderLayer();
+					events.eventsMouse.controlSelectLayer();
 				});	
+			},
+			controlOrderLayer:function(){
+				$('#itemLayers li').mouseup(function(){
+						var timer = setTimeout(function(){
+							var objetos = $( "#objeto" ).children();
+							var capas = $( "#itemLayers li" );
+							var lengthObjetos = objetos.length;
+							var lengthCapas = capas.length;
+							var height = 500;
+
+							for(var i=0; i<lengthCapas; i++){
+								var dataCapa = $( "#itemLayers li").eq(i).data('layer');
+								for(var e=0; e<lengthCapas; e++){
+									var dataObjeto = objetos.eq(e).data('layer');
+									if(dataObjeto == dataCapa){
+										objetos.eq(e).css('zIndex',500*(lengthObjetos-i));
+									}
+								};
+							};
+						}, 200);
+				});	
+			},
+			controlSelectLayer:function(){
+				$('#itemLayers li').click(function(){
+					layers.layerActual = $(this).data('layer')-1;
+					$('#itemLayers li').removeClass('selected');
+					$(this).addClass( 'selected' );
+				});
 			}
 		},
 		eventsDraw:{
@@ -59,7 +99,7 @@ var funcionInicio = function ($){
 						var x1 = event.offsetX;
 						var y1 = event.offsetY;
 						var path = "M"+x1+","+y1;
-						var area = layers.layerActual;
+						var area = layers.paper[layers.layerActual];
 						var colorStroke = colors.stroke();
 						var colorFill = colors.fill();
 						objects.recta = area.path(path).attr({"fill":colorFill,"stroke":colorStroke,"stroke-width":3});	
@@ -113,9 +153,6 @@ var funcionInicio = function ($){
 				$(area.targetDiv+' path').click(function(event){
 					$(this).remove();
 				});
-			},
-			addLayer:function(){
-				layers.layerActual = Raphael('objeto',800, 430);
 			}
 		}
 	};
@@ -136,24 +173,25 @@ var funcionInicio = function ($){
 
 		var html = '<div id="objeto"></div>';
 		$(area.targetDiv).append($(html));
-		layers.layerActual = Raphael('objeto',800, 430);
+		layers.paper.push(Raphael('objeto',800, 430));
+		$( "#objeto" ).children().first().data('layer',layers.numLayers);
+		$( "#itemLayers" ).sortable();
+        $( "#itemLayers" ).disableSelection();
+        $( "#itemLayers li" ).first().data('layer',layers.numLayers);
+        layers.numLayers++;
 
 		//Seleccionar herramienta
 		events.eventsMouse.drawSelect();
 		events.eventsMouse.drawRect();
 		events.eventsMouse.drawClean();
-		events.eventsMouse.drawAddLayer();
+
+		//Eventos de control
+		events.eventsMouse.controlAddLayer();
+		events.eventsMouse.controlOrderLayer();
+		events.eventsMouse.controlSelectLayer();
 		
 		//Usar herramienta línea
 		events.eventsDraw[events.select];
 
-		//Pruebas
-		/*var html = '<div id="objeto"></div>';
-		$(area.targetDiv).append($(html));
-		var area = Raphael('objeto',600, 600);
-		var recta = area.path("M10,10l300,0").attr({fill:'#000',strok:'#000','stroke-width':3});
-		recta.attr({
-			path:"M10,10l300,10"
-		});*/
 	});
 }(jQuery);

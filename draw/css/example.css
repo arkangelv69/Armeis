@@ -57,22 +57,10 @@ body{
 	float:left;
 	background-color:#F3F781;
 }
+#controlTools #itemLayers li.selected{
+	background: #CEF6F5;
+}
 /*Texto ejemplos*/
-#move1{
-	position:absolute;
-	top: 12px;
-	left: -1000px;
-}
-#move2{
-	position:absolute;
-	top: 72px;
-	left: -2000px;
-}
-#move3{
-	position:absolute;
-	top: 136px;
-	left: -3000px;
-}
 #workArea h2{
 position: absolute;
 top: 13px;
