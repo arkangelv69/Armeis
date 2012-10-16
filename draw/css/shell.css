@@ -1,0 +1,85 @@
+/*Css de ejemplo*/
+body{
+	margin:0;
+	padding:0;
+}
+#wrapper{
+	width:98%;
+	padding:1%;
+	height:600px;
+}
+#commonTools{
+	height:50px;
+	background-color:#FF0000;
+}
+#drawTools{
+	width:10%;
+	height:550px;
+	float:left;
+	background-color:#01DF01;
+}
+#drawTools input{
+	width: 80%;
+	margin-left: 5px;
+}
+#wrapperCenterArea{
+	width:70%;
+	float:left;
+	height:550px;
+}
+#propertyTools{
+	height:50px;
+	background-color:#0080FF;
+}
+#wrapperWorkArea{
+	width:96%;
+	height:430px;
+	background-color:#E6E6E6;
+	padding:10px 2%;
+}
+#workArea{
+	background-color:#D8D8D8;
+	border:1px solid #000;
+	height:430px;
+	width: 800px;
+	position: relative;
+}
+#workArea svg{
+	position: absolute!important;
+}
+#workArea .selected{
+	background: url('../images/fondo_transparente.png') transparent;
+	z-index:90000!important;
+}
+#timeLine{
+	height:50px;
+	background-color:#0489B1;
+}
+#controlTools{
+	width:20%;
+	height:550px;
+	float:left;
+	background-color:#F3F781;
+}
+#controlTools #itemLayers li.selected{
+	background: #CEF6F5;
+}
+/*Texto ejemplos*/
+#workArea h2{
+position: absolute;
+top: 13px;
+left: 80px;
+margin: 0;
+padding: 0;
+font-size: 22px;
+color: white;
+}
+#workArea h3{
+position: absolute;
+top: 7px;
+left: 42px;
+margin: 0;
+padding: 0;
+color: white;
+font-size: 30px;
+}
