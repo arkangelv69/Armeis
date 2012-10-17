@@ -4,7 +4,7 @@ draw = $.extend(shell, draw);
 draw = {
 	select:'select',
 	inicialClick:true,
-	empezarRecta:false,
+	empezarRect:false,
 	eventsMouse:{
 		drawSelect: function(){
 			$('#select').click(function(){
@@ -38,7 +38,7 @@ draw = {
 		},
 		rect:function(){
 			$(area.targetDiv).click(function(event){
-				draw.empezarRecta = true;
+				draw.empezarRect = true;
 				if(draw.inicialClick){	
 					var x1 = shell.positionRelative(event,'x');
 					var y1 = shell.positionRelative(event,'y');
@@ -52,7 +52,7 @@ draw = {
 				}
 			});
 			$(area.targetDiv).mousemove(function(event) {
-				if(draw.empezarRecta){
+				if(draw.empezarRect){
 					var x2 = shell.positionRelative(event,'x');
 					var y2 = shell.positionRelative(event,'y');
 					var path ="";
@@ -90,7 +90,7 @@ draw = {
 						"fill":colorFill
 					});
 				$(area.targetDiv).off();
-				draw.empezarRecta = false;
+				draw.empezarRect = false;
 				draw.eventsDraw[draw.select]();
 			});
 		},

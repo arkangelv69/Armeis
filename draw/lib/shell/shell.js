@@ -1,4 +1,6 @@
-﻿//Ejemplos raphael
+﻿//Own David Muñoz Sánchez
+//Versión Beta 16-10-2012
+//Shell
 var shell = new Object();
 shell = {
 	positionRelative:function(event, coord){
@@ -25,10 +27,10 @@ shell = {
 	sizeAreaWork:function(type){
 		var sizeAreaWork = $(area.targetDiv);
 		switch (type){
-			case 'height':
+			case 'width':
 				return sizeAreaWork.width();
 				break;
-			case 'width':
+			case 'height':
 				return sizeAreaWork.height();
 				break;
 		}
