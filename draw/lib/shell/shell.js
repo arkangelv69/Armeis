@@ -39,8 +39,8 @@ shell = {
 		//Primera capa
 		var html = '<div id="objeto"></div>';
 		$(area.targetDiv).append($(html));
-		control.paper.push(Raphael('objeto',800, 430));
-		$( "#objeto" ).children().first().data('layer',control.numLayers);
+		control.paper.push({raphael:Raphael('objeto',shell.sizeAreaWork('width'), shell.sizeAreaWork('height')),idLayers:control.numLayers});
+		control.paper[0].raphael.canvas.id = control.numLayers;
 		$( "#itemLayers" ).sortable();
         $( "#itemLayers" ).disableSelection();
         $( "#itemLayers li" ).first().data('layer',control.numLayers);
