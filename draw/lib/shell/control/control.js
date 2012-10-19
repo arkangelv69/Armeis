@@ -13,61 +13,112 @@ control = {
 			nameObject:'',
 			height:0,
 			width:0,
-			fillColor:'',
-			strokeColor:'',
-			widthStrokeColor:0,
+			fill:'',
+			stroke:'',
+			'stroke-width':0,
 			positionRelativeLeft:0,
 			positionRelativeTop:0,
 			positionAbsoluteLeft:0,
-			positionAbsoluteTop:0
+			positionAbsoluteTop:0,
+			path:''
+		},
+		templatePropertys:{
+			template:'\
+				<h3>##TITLE##</h3>\
+				<div>##PROPERTYS##</div>\
+			',
+			typeText:'<legend>##LEGEND##</legend><input type="text" name="##NAME##" id="##ID##" value="##VALUE##">'
+		},
+		drawPropertys:function(){
+			if(draw.objectSelect){
+				control.propertys.setPropertys();
+				control.propertys.render();		
+			}else{
+				control.propertys.cleanPropertys();
+			}
+		},
+		cleanPropertys:function(){
+			$('#propertys input').each(function(index){
+				 $(this).val('');
+			})
 		},
 		getProperty:function(  property ){
-			return control.get [ property ](); 
+			return control.propertys.get [ property ](); 
 		},
-		setProperty:function( ){
-			var set = '';
-			var get = '';
+		setPropertys:function( ){
 			for( property in control.propertys.list){
-				if(control.propertys.list [ property ])continue;
-				set = control.propertys.list [ property ];
-				get = control.propertys.getProperty( property );
-				set = get;	
+				if(typeof(control.propertys.list [ property ]) == 'undefined')continue;
+				control.propertys.list [ property ] = control.propertys.getProperty( property );
 			}
 		},
 		get:{
 			nameObject: function(){
-
+				return objects.librery[objects.objectActual].object.attr("nameObject");
 			},
 			height: function(){
-				
+				return objects.librery[objects.objectActual].object.attr("height");
 			},
 			width: function(){
-				
+				return objects.librery[objects.objectActual].object.attr("width");
 			},
-			fillColor: function(){
-				
+			fill: function(){
+				return objects.librery[objects.objectActual].object.attr("fill");
 			},
-			strokeColor: function(){
-				
+			stroke: function(){
+				return objects.librery[objects.objectActual].object.attr("stroke");
 			},
-			widthStrokeColor: function(){
-				
+			'stroke-width': function(){
+				return objects.librery[objects.objectActual].object.attr("stroke-width");
 			},
 			positionRelativeLeft: function(){
-				
+				return objects.librery[objects.objectActual].object.attr("positionRelativeLeft");
 			},
 			positionRelativeTop: function(){
-				
+				return objects.librery[objects.objectActual].object.attr("positionRelativeTop");
 			},
 			positionAbsoluteLeft: function(){
-				
+				return objects.librery[objects.objectActual].object.attr("positionAbsoluteLeft");
 			},
 			positionAbsoluteTop: function(){
-				
-			}	
+				return objects.librery[objects.objectActual].object.attr("positionAbsoluteTop");
+			},
+			path: function(){
+				return objects.librery[objects.objectActual].object.attr("path");
+			}
+		},
+		render:function(){
+			var propertys = control.propertys.list;
+			var htmlOutput = '';
+			var htmlList = '';
+			var type = control.propertys.templatePropertys.typeText;
+			htmlOutput = control.propertys.templatePropertys.template;
+			htmlOutput = htmlList.replace( '##TITLE##', shell.tras('Propiedades') );
+			for( property in propertys ){
+				if(typeof(control.propertys.list[property]) == 'undefined')continue;
+				htmlList += type;
+				htmlList = htmlList.replace( '##LEGEND##', property );
+				htmlList = htmlList.replace( '##NAME##', property );
+				htmlList = htmlList.replace( '##ID##', property );
+				htmlList = htmlList.replace( '##VALUE##', control.propertys.list[property] );
+			}
+			htmlOutput += htmlList;
+			$("#propertys").html(htmlOutput);
+			$("#propertys input").off();
+			control.eventsMouse.controlSetPropertysObjects();
 		}
 	},
 	eventsMouse:{
+		controlSetPropertysObjects:function(){
+			$('#propertys input').focus(function(){
+				var attrObject =  $(this).val();
+				var idAttrObject = $(this).attr('id');
+				if(control.propertys.list[idAttrObject]){
+					objects.librery[objects.objectActual].object.attr({
+						idAttrObject:attrObject
+					});
+				}
+			});
+		},
 		controlAddLayer:function(){
 			$('#addLayer').click(function(){
 				var layers = $( '#itemLayers' );

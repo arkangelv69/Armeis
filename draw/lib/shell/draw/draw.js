@@ -5,6 +5,7 @@ draw = {
 	select:'select',
 	inicialClick:true,
 	empezarRect:false,
+	objectSelect:false,
 	eventsMouse:{
 		drawSelect: function(){
 			$('#select').click(function(){
@@ -12,6 +13,7 @@ draw = {
 				$(area.targetDiv).off();
 				$(area.targetDiv+' path').off();
 				draw.eventsDraw[draw.select]();
+				draw.eventsDraw['deselect']();
 			});
 		},
 		drawRect:function(){
@@ -20,6 +22,7 @@ draw = {
 				$(area.targetDiv).off();
 				$(area.targetDiv+' path').off();
 				draw.eventsDraw[draw.select]();
+				draw.eventsDraw['deselect']();
 			});	
 		},
 		drawClean:function(){
@@ -27,15 +30,28 @@ draw = {
 				draw.select = 'clean';
 				$(area.targetDiv).off();
 				draw.eventsDraw[draw.select]();
+				draw.eventsDraw['deselect']();
 			});	
 		}
 	},
 	eventsDraw:{
 		select:function(){
-			$(area.targetDiv+' path').click(function(event){
-				$(this).css({'fill':'red'});
-				alert($(this)[0].raphaelid);
+			$(area.targetDiv).children().children().children('path').click(function(event){
+				//alert($(this)[0].raphaelid);
+				if($(this)[0].raphaelid != objects.objectActual /*|| draw.select != 'select'*/)draw.objectSelect = false;
+				if(draw.objectSelect){
+					draw.objectSelect = false;
+				}
+				else{
+					draw.objectSelect = true;
+					objects.objectActual = $(this)[0].raphaelid;
+				}
+				control.propertys.drawPropertys();
 			});
+		},
+		deselect:function(){
+			draw.objectSelect = false;
+			control.propertys.cleanPropertys();
 		},
 		rect:function(){
 			$(area.targetDiv).click(function(event){

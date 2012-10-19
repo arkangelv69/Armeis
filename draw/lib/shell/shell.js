@@ -35,6 +35,9 @@ shell = {
 				break;
 		}
 	},
+	tras:function(word){
+		return word;
+	},
 	render:function(){
 		//Primera capa
 		var html = '<div id="objeto"></div>';
@@ -54,6 +57,7 @@ shell = {
 		control.eventsMouse.controlAddLayer();
 		control.eventsMouse.controlOrderLayer();
 		control.eventsMouse.controlSelectLayer();
+		control.eventsMouse.controlSetPropertysObjects();
 		
 		//Usar herramienta línea
 		draw.eventsDraw[draw.select];
