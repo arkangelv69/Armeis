@@ -109,13 +109,11 @@ control = {
 	},
 	eventsMouse:{
 		controlSetPropertysObjects:function(){
-			$('#propertys input').focus(function(){
+			$('#propertys input').change(function(){
 				var attrObject =  $(this).val();
 				var idAttrObject = $(this).attr('id');
 				if(control.propertys.list[idAttrObject]){
-					objects.librery[objects.objectActual].object.attr({
-						idAttrObject:attrObject
-					});
+					objects.librery[objects.objectActual].object.attr(idAttrObject,attrObject);
 				}
 			});
 		},
