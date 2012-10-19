@@ -3,10 +3,11 @@ var control = new Object;
 control = $.extend(shell, control);
 control = {
 	numberBetweenLayers:500,
-	numLayers:1,
+	numLayers:0,
 	paper:[],
 	layerActual:0,
-	nueva:true,
+	new:true,
+	clickSelect:false,
 	propertys:{
 		list:{
 			nameObject:'',
@@ -69,49 +70,53 @@ control = {
 	eventsMouse:{
 		controlAddLayer:function(){
 			$('#addLayer').click(function(){
-				var layers = $( "#itemLayers li" );
-				var object = $( "#objeto" );
-				var numero = layers.length + 1;
+				var layers = $( '#itemLayers' );
+				var object = $( '#objeto' );
+				var numero = layers.children('li').length + 1;
 				var lista = '';
 				var longObject = object.children().length;
+				control.numLayers++;
 				control.paper.push({raphael:Raphael('objeto',shell.sizeAreaWork('width'), shell.sizeAreaWork('height')),idLayers:control.numLayers});
 				lista = $('<li class="ui-state-default layer'+numero+' new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Capa '+numero+'</li>');
-				$( "#itemLayers" ).append(lista);
-				$( "#itemLayers li.new" ).data('layer',control.numLayers);
-				control.layerActual = $( "#itemLayers li.new" ).data('layer')-1;
-				control.paper[control.numLayers-1].raphael.canvas.id = control.numLayers;
-				layers.removeClass('new');
-				control.numLayers++;
-				layers.off();
-				control.nueva = true;
+				layers.append(lista);
+				layers.children('li.new').data('layer',control.numLayers);
+				layers.children('li').removeClass('new');
+				control.layerActual = control.numLayers;
+				control.paper[control.numLayers].raphael.canvas.id = control.numLayers;
+				layers.children('li').off();
+				control.new = true;
 				control.eventsMouse.controlOrderLayer();
 				control.eventsMouse.controlSelectLayer();
 			});	
 		},
 		controlOrderLayer:function(){
-			if(control.nueva){
-				var objetos = $( "#objeto" ).children();
-				var layers = $('#itemLayers li');
-				var lengthObjetos = objetos.length;
-				var lengthCapas = layers.length;
-				var zIndex = control.numberBetweenLayers;
+			if(control.new){
+				var timerControl = setTimeout(function(){
+					var objetos = $( "#objeto" ).children();
+					var layers = $('#itemLayers').children('li');
+					var lengthObjetos = objetos.length;
+					var lengthCapas = layers.length;
+					var zIndex = control.numberBetweenLayers;
 
-				for(var i=0; i<lengthCapas; i++){
-					var dataCapa = layers.eq(i).data('layer');
-					for(var e=0; e<lengthObjetos; e++){
-						var dataObjeto = objetos[e].id;
-						if(dataObjeto == dataCapa){
-							objetos.eq(e).css('zIndex',zIndex*(lengthObjetos-i));
-						}
+					for(var i=0; i<lengthCapas; i++){
+						var dataCapa = layers.eq(i).data('layer');
+						for(var e=0; e<lengthObjetos; e++){
+							var dataObjeto = objetos[e].id;
+							if(dataObjeto == dataCapa){
+								objetos.eq(e).css('zIndex',zIndex*(lengthObjetos-i));
+							}
+						};
 					};
-				};
-				control.nueva = false;
+					control.new = false;
+				},200);
 			}
-			$('#itemLayers li').mouseup(function(event){
-				if(true){
-					//var timerControl = setTimeOut(function(){
+			$('#itemLayers').children('li').mouseup(function(event){
+				if(control.clickSelect){
+					control.clickSelect = false;
+				}else{
+					var timerControl = setTimeout(function(){
 						var objetos = $( "#objeto" ).children();
-						var layers = $('#itemLayers li');
+						var layers = $('#itemLayers').children();
 						var lengthObjetos = objetos.length;
 						var lengthCapas = layers.length;
 						var zIndex = control.numberBetweenLayers;
@@ -125,28 +130,29 @@ control = {
 								}
 							};
 						};
-					//},200);
+					},200);
 				}
 			});	
 		},
 		controlSelectLayer:function(){
-			$('#itemLayers li').click(function(){
+			$('#itemLayers').children('li').click(function(){
 				var objetos = $( "#objeto" ).children();
 				var lengthObjetos = objetos.length;
 				var zIndex = control.numberBetweenLayers;
+				var dataCapa = $(this).data('layer');
 				if($(this).hasClass( 'selected')){
 					objetos.removeAttr('class');
 					$(this).removeClass('selected');
 				}
 				else{
-					$('#itemLayers li').removeClass('selected');
+					$('#itemLayers').children('li').removeClass('selected');
 					$(this).addClass( 'selected' );
-					var dataCapa = $(this).data('layer');
+					control.clickSelect = true;
 					objetos.removeAttr('class');
 					for(var e=0; e<lengthObjetos; e++){
 						var dataObjeto = objetos[e].id;
 						if(dataObjeto == dataCapa){
-							control.layerActual = dataObjeto-1;
+							control.layerActual = dataObjeto;
 							objetos.eq(e).css('zIndex',zIndex*(lengthObjetos+1));
 							objetos.eq(e).attr('class','selected');
 						}

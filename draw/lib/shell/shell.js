@@ -43,8 +43,7 @@ shell = {
 		control.paper[0].raphael.canvas.id = control.numLayers;
 		$( "#itemLayers" ).sortable();
         $( "#itemLayers" ).disableSelection();
-        $( "#itemLayers li" ).first().data('layer',control.numLayers);
-        control.numLayers++;
+        $( "#itemLayers" ).children("li").first().data('layer',control.numLayers);
 
 		//Seleccionar herramienta
 		draw.eventsMouse.drawSelect();
