@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		
+		<!-- Script -->
+		<script src="../lib/jquery/jquery.js" type="text/javascript"></script>
+		<script src="../lib/jqueryUI/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+		<script src="../lib/raphael/raphael.js"type="text/javascript"></script>
+		<!--<script src="http://jquery-accordion.googlecode.com/svn/trunk/jquery.accordion.js" type="text/javascript"></script>
+		<script src="https://epiclock.googlecode.com/svn/trunk/epiclock/javascript/jquery.epiclock.min.js" type="text/javascript"></script>-->
+				
+		<!-- Estilos -->
+		<link rel="stylesheet" href="../css/example.css" />
+		<link rel="stylesheet" href="../lib/jqueryUI/css/redmond/jquery-ui-1.8.24.custom.css" />
+		
+	</head>
+	<body>
+	<script>
+            window.onload = function () {
+    colors = {
+    fill:function(){
+        return $('#innerColor').val();
+    },
+    stroke:function(){
+        return $('#borderColor').val();
+    },
+    styles: {
+        line : {
+            stroke: "#000",
+            "stroke-width": 2,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round"
+        },
+        dots :{
+            stroke: "#fff",
+            "stroke-width": 2,
+            "stroke-dasharray": "- ",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round"
+        },
+        fill :{
+            stroke: "#fff",
+            fill: "#000",
+            "fill-opacity": .5,
+            "stroke-width": 2,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+             cursor: "move"
+        },
+        none :{
+            fill: "#000",
+            opacity: 0
+        }
+    }
+};
+	   var paper = Raphael(10, 50, 500, 500);
+       var circle2 = paper.circle(120,126,106).attr({'fill':'#105FA5','stroke':'none'}).glow();
+       //var circle1 = paper.circle(100,100,100).attr({'fill':'r(0.75, 0.75)#026BC8-#0084F8','stroke':'none'});
+       var circle1 = paper.circle(120,120,100).attr({'fill':'r(0.75, 0.75)#0086FB-#04559D','stroke':'none'});
+       var sombra = paper.path('M28,120 c0,-116 184,-116 184,0 c-10,50 -92,50 -92,0 c0,-50 -92,-50 -92,0').attr({'fill':'#fff','stroke':'none','opacity':.2}).rotate(90,120,126);
+       
+
+         }         
+        </script>
+		<div id="canvas"></div>
+	</body>
+</html>
