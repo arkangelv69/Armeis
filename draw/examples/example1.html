@@ -20,17 +20,51 @@
 	<body>
 	<script>
             window.onload = function () {
-			 var R = Raphael(0, 0, "100%", "100%"),
-                    r = R.circle(100, 100, 50).attr({fill: "90-#fff-#000", stroke: "none", opacity: .5});
+			 var R = Raphael(0, 0, "100%", "100%");
 
+                    
 // Creates circle at x = 50, y = 40, with radius 10
-var dots = {
+ var line = {
             stroke: "#000",
+            "stroke-width": 2,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round"
+        },
+        dots = {
+            stroke: "#fff",
             "stroke-width": 2,
             "stroke-dasharray": "- ",
             "stroke-linecap": "round",
             "stroke-linejoin": "round"
-        }
+        },
+        fill = {
+            stroke: "#fff",
+            fill: "#fff",
+            "fill-opacity": .5,
+            "stroke-width": 2,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round"
+        },
+        none = {
+            fill: "#000",
+            opacity: 0
+        };
+var e = R.ellipse(50, 50, 40, 30).attr(line);
+bb = R.rect().attr(e.getBBox()).attr(dots);
+
+var x, y;
+R.circle(15, 15, 10).drag(function (dx, dy) {
+    this.attr({
+        cx: Math.min(Math.max(x + dx, 15), 85),
+        cy: Math.min(Math.max(y + dy, 15), 85)
+    });
+}, function () {
+    x = this.attr("cx");
+    y = this.attr("cy");
+});
+
+/*r = R.circle(100, 100, 50).attr({fill: "90-#fff-#000", stroke: "none", opacity: .5});
+a = 	R.rect().attr(r.getBBox()).attr(dots);*/
 /*var cuadro = paper.rect().attr(circle.getBBox()).attr(dots);
 var cuadradito1 = paper.rect().attr({
 	x:cuadro.attr("x")-5,
@@ -54,13 +88,7 @@ var cuadradito2 = paper.rect().attr({
 	fill:"#000"
 });*/
 // Sets the fill attribute of the circle to red (#f00)
-var x, y;
-/*circle.attr(
-	{
-	 "stroke":"#21BE00",
-	 "stroke-width":10,
-	 "fill":"0-#fff-#f00:20-#000"
-	});*/
+/*var x, y;
 var start = function () {
                     this.ox = this.attr("cx");
                     this.oy = this.attr("cy");
@@ -72,7 +100,15 @@ var start = function () {
                 up = function () {
                     this.animate({r: 50, opacity: .5}, 500, ">");
                 };
-                r.drag(move, start, up);	
+                r.drag(move, start, up);	*/
+    R.customAttributes.hue = function (num) {
+    num = num % 1;
+    return {fill: "hsb(" + num + ", 0.75, 1)"};
+};
+// Custom attribute “hue” will change fill
+// to be given hue with fixed saturation and brightness.
+// Now you can use it like this:
+var c = R.circle(10, 10, 10).attr({hue: .45});            
 	};
         </script>
 		<div id="canvas"></div>

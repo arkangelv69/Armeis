@@ -36,15 +36,30 @@ draw = {
 	},
 	eventsDraw:{
 		select:function(){
-			$(area.targetDiv).children().children().children('path').click(function(event){
-				//alert($(this)[0].raphaelid);
-				if($(this)[0].raphaelid != objects.objectActual /*|| draw.select != 'select'*/)draw.objectSelect = false;
+			$(area.targetDiv).not('path').click(function(event){
 				if(draw.objectSelect){
 					draw.objectSelect = false;
+					var r = objects.librery[objects.objectActual].object;
+					r.node.class= "";
+					r.attr("cursor","default");
+					r.undrag();
 				}
-				else{
+			});
+			$(area.targetDiv).children().children().children('path').click(function(event){
+				var R = control.paper[control.layerActual].raphael;
+				var r = objects.librery[objects.objectActual].object;
+				objects.select.tempClean();
+				r.attr("cursor","default");
+				r.undrag();
+				if(!draw.objectSelect || $(this)[0].id != objects.objectActual || $(this)[0].id == objects.objectActual){
+					objects.objectActual = $(this)[0].id;
 					draw.objectSelect = true;
-					objects.objectActual = $(this)[0].raphaelid;
+					objects.select.tempDraw();
+					var R = control.paper[control.layerActual].raphael;
+					var r = objects.librery[objects.objectActual].object;
+					r.node.class= "selected";
+					r.attr(colors.styles.selected);
+					r.drag(shell.drag.move, shell.drag.start, shell.drag.up);
 				}
 				control.propertys.drawPropertys();
 			});
@@ -52,6 +67,7 @@ draw = {
 		deselect:function(){
 			draw.objectSelect = false;
 			control.propertys.cleanPropertys();
+			if(objects.select.attributes)objects.select.tempClean();
 		},
 		rect:function(){
 			$(area.targetDiv).click(function(event){
@@ -63,7 +79,9 @@ draw = {
 					var layer = control.paper[control.layerActual].raphael;
 					var colorStroke = colors.stroke();
 					var colorFill = colors.fill();
-					objects.librery.push({object:layer.path(path).attr({"fill":colorFill,"stroke":colorStroke,"stroke-width":3}),idObject:objects.number,idlayer:control.layerActual});
+					objects.librery.push({object:layer.path(path).attr({"stroke-linecap": "round","stroke-linejoin": "round","fill":colorFill,"stroke":colorStroke,"stroke-width":3}),idObject:objects.number,idlayer:control.layerActual});
+					objects.librery[objects.number].object.node.id = objects.number;
+					objects.librery[objects.number].object.class= "";
 					objects.objectActual = 	objects.number;
 				}else{
 					draw.inicialClick = true;
@@ -116,6 +134,7 @@ draw = {
 		clean:function(){
 			$(area.targetDiv+' path').click(function(event){
 				$(this).remove();
+				if(objects.librery.temp)objects.librery.temp.remove();
 			});
 		}
 	}

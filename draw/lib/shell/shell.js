@@ -38,6 +38,27 @@ shell = {
 	tras:function(word){
 		return word;
 	},
+	drag:{
+		start:function(){
+			this.odx = 0;
+			this.ody = 0;
+			this.animate({"fill-opacity": 0.2}, 500);
+			objects.select.tempClean();
+			objects.select.tempDraw();
+		},
+		move:function(dx,dy){
+			this.translate(dx - this.odx, dy - this.ody);
+			this.odx = dx;
+			this.ody = dy;
+			objects.select.tempClean();
+			objects.select.tempDraw();
+		},
+		up:function(){
+			this.animate({"fill-opacity": 1}, 500);
+			objects.select.tempClean();
+			objects.select.tempDraw();
+		}
+	},
 	render:function(){
 		//Primera capa
 		var html = '<div id="objeto"></div>';
