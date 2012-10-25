@@ -20,17 +20,22 @@
 	<body>
 	<script>
         window.onload = function () {  
-            function Boton(type,target,url,scale){
-                this.type = type;
-                this.url = url;
-                this.target = target;
-                if(!scale)this.scale = 1;
-                else this.scale = scale;
+            function Boton(options){
+                defaults =  {type:'none',target:'body',url:'none',scale:1,color1:'#105FA5',color2:'#0086FB',color3:'#04559D'};
+                options = $.extend(defaults,options);
+                this.color1 = options.color1;
+                this.color2 = options.color2;
+                this.color3 = options.color3;
+                this.type = options.type;
+                this.url = options.url;
+                this.target = options.target;
+                if(!options.scale)this.scale = 1;
+                else this.scale = options.scale;
                 this.styles = {
                     iconoIndiceLineas:{
                         'fill':"#FFFFFF", 'stroke':"#FFFFFF", 'stroke-width':5*this.scale, opacity:.5
                     },
-                    iconoIndiceBolas:{
+                    iconoCommon:{
                         'fill':"#FFFFFF", opacity:.5,'stroke':"none"
                     },
                     sombraFondo:{
@@ -43,10 +48,12 @@
                 var paper = Raphael(this.target,250*this.scale, 250*this.scale);
                 var circle5 = paper.circle(120,122,110).attr(this.styles.sombraFondo).transform(escalar);
                 var circle4 = paper.circle(120,130,110).attr(this.styles.sombraFondo).transform(escalar);
-                var circle2 = paper.circle(120,126,106).attr({'fill':'#105FA5','stroke':'none'}).transform(escalar);
-                var circle1 = paper.circle(120,120,100).attr({'fill':'r(0.75, 0.75)#0086FB-#04559D','stroke':'none'}).transform(escalar);
+                var circle2 = paper.circle(120,126,106).attr({'fill':this.color1,'stroke':'none'}).transform(escalar);
+                var circle1 = paper.circle(120,120,100).attr({'fill':'r(0.75, 0.75)'+this.color2+'-'+this.color3,'stroke':'none'}).transform(escalar);
                 var icono = {};
                 switch(this.type){
+                    case'none':
+                        break;
                     case 'home':
                         icono = paper.path('M50,100 l70,-50 l70,50 h-25 v80 h-25 v-40 h-40 v40 h-25 v-80 z').attr({'fill':'#fff','stroke':'none','opacity':.5}).transform(escalar);
                         break;
@@ -68,7 +75,33 @@
                             paper.circle(60,170.658,6)
                         );
                         iconoLineas.attr(this.styles.iconoIndiceLineas).transform(escalar);
-                        iconoBolas.attr(this.styles.iconoIndiceBolas).transform(escalar);
+                        iconoBolas.attr(this.styles.iconoCommon).transform(escalar);
+                        break;
+                    case 'glosario':
+                       var glosario = paper.text(115, 120, 'A/Z').attr(this.styles.iconoCommon).transform(escalar).attr({'font-size':100});
+                        break;
+                    case 'tutorial':
+                       var group_a = paper.set(); var path_b = paper.path("M79.456,120.893v47.581c42.947,32.263,81.273,6.145,84.435,0v-53.668 l-45.722,36.772L79.456,120.893z"); path_b.attr({fill: '#FFFFFF',stroke: '#FFFFFF',"stroke-width": '2',parent: 'group_a','stroke-opacity': '1'}).data('id', 'path_b'); var path_c = paper.path("M 188.708,90.285 123.864,56.568 47.63,90.285 118.169,146.365 177.754,99.345 123.3,91.914 181.396,95.789 z"); path_c.attr({fill: '#FFFFFF',parent: 'group_a','stroke-width': '0','stroke-opacity': '1'}).data('id', 'path_c'); var path_d = paper.path("M191.775,152.938c0,0.979,2.867,11.754,2.783,12.554 c-0.347,3.332-4.298-4.709-5.812-3.766c-0.998,0.622-5.267-1.496-6.611-1.496c-1.517,0-2.981,6.59-4.21,5.771 c-1.427-0.952,0.532-7.152,0.069-9.902c-0.156-0.926-3.237,5.092-3.237,3.906c0-1.895,3.185-10.77,3.525-12.418 c1.051-5.088,3.557-8.669,6.481-8.669c3.001,0,8.796,5.773,9.796,11.074C194.851,151.53,191.775,151.195,191.775,152.938z"); path_d.attr({fill: '#FFFDFD',stroke: '#FFFFFF',"stroke-width": '2',parent: 'group_a','stroke-opacity': '1'}).data('id', 'path_d'); var rect_e = paper.rect(182.136, 91.914, 3.067, 50.836); rect_e.attr({x: '182.136',y: '91.914',fill: '#FFFFFF',stroke: '#FFFFFF',"stroke-width": '2',parent: 'group_a','stroke-opacity': '1'}).data('id', 'rect_e'); group_a.attr({'name': 'group_a'}); var paperGroups = [group_a];
+                       group_a.push(path_b,path_c,path_d,path_d,rect_e);
+                       group_a.attr(this.styles.iconoCommon).transform(escalar);
+
+                        break;
+                    case 'retroceder':
+                        flecha = paper.path("M50,80 h70 v-40 l70,80 l-70,80 v-40 h-70 z").attr({fill:"#FFFFFF"}).attr(this.styles.iconoCommon).transform(escalar).transform('...r180');
+                        break;
+                    case 'avanzar':
+                        flecha = paper.path("M50,80 h70 v-40 l70,80 l-70,80 v-40 h-70 z").attr({fill:"#FFFFFF"}).attr(this.styles.iconoCommon).transform(escalar);
+                        break;
+                    case 'guardarSalir':
+                       var XMLID_1_ = paper.set(); 
+                       var path_a = paper.path("M12.364,100.683V12.364h15.647v43.659h56.023V12.364h4.98l11.668,11.362v18.278h12.363V18.509L94.04,0H0 v113.047h69.997l-11.35-12.364H12.364z M59.302,12.364h12.365v31.292H59.302V12.364z"); path_a.attr({fill: '#FFFFFF',parent: 'XMLID_1_','stroke-width': '0','stroke-opacity': '1'}).data('id', 'path_a'); 
+                       var path_b = paper.path("M 113.609,85.346 113.609,52.87 86.695,52.87 86.695,85.346 61.462,85.346 100.153,127.495 138.844,85.346 z"); path_b.attr({parent: 'XMLID_1_','stroke-width': '0','stroke-opacity': '1','fill': '#000000'}).data('id', 'path_b'); XMLID_1_.attr({'id': 'XMLID_1_','name': 'XMLID_1_'}).transform('...t100,100'); 
+                       var rsrGroups = [XMLID_1_];
+                       XMLID_1_.push(path_a,path_b);
+                       XMLID_1_.attr(this.styles.iconoCommon).transform(escalar).transform('...t60,60'); 
+
+                        break;
+                    default:
                         break;
                 }
                 var scale = this.scale;
@@ -87,7 +120,10 @@
                                 circle5.animate({'fill':'#333','opacity':.2,'stroke':'none','stroke-width':0},500);
                             });
                 circle3.click(function(){
-                    if(typeof(url) == 'function'){
+                    if(url == 'none'){
+                        return '';
+                    }
+                    else if(typeof(url) == 'function'){
                         url();
                     }else{
                         window.open(url,'_blank');    
@@ -96,11 +132,24 @@
             };
 
 
-            var ejemplo1 = new Boton('home','canvas','http://www.google.com',1);
+            var ejemplo1 = new Boton({type:'avanzar',target:'canvas',url:'http://www.google.com',scale:1,color1:'#333',color2:'#EF9222',color3:'#C44111'});
             ejemplo1.draw();
-            var ejemplo2 = new Boton('indice','canvas2','http://www.google.com',.3);
-            ejemplo2.draw();     
+            var ejemplo2 = new Boton({type:'retroceder',target:'canvas2',url:'http://www.google.com',scale:.5});
+            ejemplo2.draw();
+            var ejemplo3 = new Boton({type:'home',target:'canvas',url:'http://www.google.com',scale:1,color1:'#B83737',color2:'#F09191',color3:'#C64D4D'});
+            ejemplo3.draw();  
+             var ejemplo4 = new Boton({type:'indice',target:'canvas2',url:'http://www.google.com',scale:1});
+            ejemplo4.draw();
+             var ejemplo5 = new Boton({type:'tutorial',target:'canvas',url:'http://www.google.com',scale:1});
+            ejemplo5.draw();  
+            var ejemplo6 = new Boton({type:'guardarSalir',target:'canvas',url:'http://www.google.com',scale:.5});
+            ejemplo6.draw();   
+            var ejemplo7 = new Boton({type:'glosario',target:'canvas2',url:'http://www.google.com',scale:.5,color1:'#B83737',color2:'#F09191',color3:'#C64D4D'});
+            ejemplo7.draw(); 
         }
+        /*Colores chulos
+        color1:'#333',color2:'#EF9222',color3:'#C44111'
+        */
         </script>
         <div id="rsr"></div>
         <div id="canvas"></div>
