@@ -50,21 +50,83 @@
             "stroke-linejoin": "round",
              cursor: "move"
         },
+        iconoIndice:{
+            'fill':"#FFFFFF", 'stroke':"#FFFFFF", 'stroke-width':4, opacity:.5
+        },
+        sombraFondo:{
+            'stroke':'none','stroke-linejoin':'round','stroke-linecap':'round','opacity':.2,'fill':'#333'
+        },
         none :{
             fill: "#000",
             opacity: 0
         }
     }
-};
-	   var paper = Raphael(10, 50, 500, 500);
-       var circle2 = paper.circle(120,126,106).attr({'fill':'#105FA5','stroke':'none'}).glow();
-       //var circle1 = paper.circle(100,100,100).attr({'fill':'r(0.75, 0.75)#026BC8-#0084F8','stroke':'none'});
-       var circle1 = paper.circle(120,120,100).attr({'fill':'r(0.75, 0.75)#0086FB-#04559D','stroke':'none'});
-       var sombra = paper.path('M28,120 c0,-116 184,-116 184,0 c-10,50 -92,50 -92,0 c0,-50 -92,-50 -92,0').attr({'fill':'#fff','stroke':'none','opacity':.2}).rotate(90,120,126);
-       
+};      
+        function Boton(type,target,scale){
+            this.type = type;
+            this.target = target;
+            if(!scale)this.scale = 1;
+            else this.scale = scale;
+        };
+        Boton.prototype.hover = function(){
+
+        };
+        Boton.prototype.draw = function(){
+            var escalar = 's'+this.scale+','+this.scale+','+this.scale+','+this.scale;
+            var paper = Raphael(this.target,250*this.scale, 250*this.scale);
+            var circle5 = paper.circle(120,122,110).attr(colors.styles.sombraFondo).transform(escalar);
+            var circle4 = paper.circle(120,130,110).attr(colors.styles.sombraFondo).transform(escalar);
+            var circle2 = paper.circle(120,126,106).attr({'fill':'#105FA5','stroke':'none'}).transform(escalar);
+            var circle1 = paper.circle(120,120,100).attr({'fill':'r(0.75, 0.75)#0086FB-#04559D','stroke':'none'}).transform(escalar);
+            var icono = {};
+            switch(this.type){
+                case 'home':
+                    icono = paper.path('M50,100 l70,-50 l70,50 h-25 v80 h-25 v-40 h-40 v40 h-25 v-80 z').attr({'fill':'#fff','stroke':'none','opacity':.5}).transform(escalar);
+                    break;
+                case 'indice':
+                    icono = paper.set();
+                    icono.push(
+                        paper.path('M70,76.35 h120'),
+                        paper.path('M70,99.927 h120'),
+                        paper.path('M70,123.504 h120'),
+                        paper.path('M70,147.081 h120'),
+                        paper.path('M70,170.658 h120'),
+                        paper.circle(60,76.35,6),
+                        paper.circle(60,99.927,6),
+                        paper.circle(60,123.604,6),
+                        paper.circle(60,147.081,6),
+                        paper.circle(60,170.658,6)
+                    );
+                    icono.attr(colors.styles.iconoIndice).transform(escalar);
+                    break;
+            }
+            var scale = this.scale;
+            var sombra = paper.path('M28,120 c0,-116 164,-116 184,-20 c10,60 -72,30 -92,0 c-20,-30 -72,-30 -92,20').attr({'fill':'#fff','stroke':'none','opacity':.2}).transform('r-35 '+120*scale+','+120*scale+' s'+scale+','+scale+','+scale+','+scale);
+            var circle3 = paper.circle(120,120,100).attr({'fill':'#fff','stroke':'none','opacity':.0}).transform('s'+scale+','+scale+','+scale+','+scale)
+                        .hover(function(){
+                            this.attr({'cursor':'pointer'});
+                            sombra.animate({'transform':'r320 '+120*scale+','+120*scale+' s'+scale+','+scale+','+scale+','+scale},1000);
+                            circle4.animate({'fill':'#999','opacity':.5,'stroke':'#999','stroke-width':12*scale},500);
+                            circle5.animate({'fill':'#f1f2f3','opacity':.5,'stroke':'#f1f2f3','stroke-width':12*scale},500);
+                        },function(){
+                            this.attr({'cursor':'default'});
+                            sombra.animate({'transform':'r-45 '+120*scale+','+120*scale+' s'+scale+','+scale+','+scale+','+scale},1000);
+                            circle4.animate({'fill':'#333','opacity':.2,'stroke':'none','stroke-width':0},500);
+                            circle5.animate({'fill':'#333','opacity':.2,'stroke':'none','stroke-width':0},500);
+                        });
+        };
+        Boton.prototype.click = function(){
+
+        };
+
+        var ejemplo1 = new Boton('home','canvas',.5);
+        ejemplo1.draw();
+        var ejemplo2 = new Boton('indice','canvas2',.2);
+        ejemplo2.draw();
 
          }         
         </script>
-		<div id="canvas"></div>
+        <div id="canvas"></div>
+		<div id="canvas2"></div>
 	</body>
 </html>
