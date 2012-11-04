@@ -18,7 +18,7 @@
             var radio = 200;
             var positionX = 400;
             var positionY = 220;
-            var altura = 100;
+            var altura = 20;
 
             var i = 0;
             for(var property in options){
@@ -36,18 +36,29 @@
                     var arc1x = -(radio -radio*Math.cos(angulo[i]*Math.PI/180));
                     var arc1y = radio*Math.sin(angulo[i]*Math.PI/180);
                     //primer arco
-                    var a1 = paper.path('M'+positionX+','+positionY+' h'+radio+' a'+radio+','+radio+' 0 0,0 '+arc1x+','+arc1y+' z')
-                        .attr({fill: -rot[i]+'-#999-#fff:0-'+color,'stroke':'none'})
+                    var laflag = 0;
+                    if(angulo[i]<-180){
+                        laflag = 1;
+                    }
+                    if(angulo[i]<=-360){
+                        var c1 = paper.circle(positionX,positionY,radio)
+                        .attr({fill: -rot[i]+'-#999-#fff:0-'+color,'stroke':'none'});
+                    }else{
+                        var a1 = paper.path('M'+positionX+','+positionY+' h'+radio+' a'+radio+','+radio+' 0 '+laflag+',0 '+arc1x+','+arc1y+' z')
+                            .attr({fill: -rot[i]+'-#999-#fff:0-'+color,'stroke':'none'})
+                            .animate({'transform':'r'+rot[i]+' '+positionX+','+positionY},1000);
+                    }
                     //-->
-                    .animate({'transform':'r'+rot[i]+' '+positionX+','+positionY},1000);
                     var var1x = radio*Math.cos(rot[i]*Math.PI/180);
                     var var1y = radio*Math.sin(rot[i]*Math.PI/180);
                     var var2x = radio*Math.cos((angulo[i]+rot[i])*Math.PI/180);
                     var var2y = radio*Math.sin((angulo[i]+rot[i])*Math.PI/180);
                     //Rectas
                     var r1 = paper.path('M'+positionX+','+positionY+' v'+altura+' l'+var1x+','+var1y+' v-'+altura+' z')
-                        .toBack()
                         .attr({fill: -rot[i]+'-#888-'+color,'stroke':'none'});
+                        if( !(rot[i] < -270 && rot[i] > -360) ){
+                            r1.toBack();
+                        }
                     var r2 = paper.path('M'+positionX+','+positionY+' v'+altura+' l'+var2x+','+var2y+'v-'+altura+' z')
                         .attr({fill: -rot[i]+'-#888-'+color,'stroke':'none'});
                     //-->
@@ -74,9 +85,16 @@
                     }
                     //-->
                     //segundo arco
-                    var a2 = paper.path('M'+positionX+','+(positionY+altura)+' h'+radio+' a'+radio+','+radio+' 0 0,0 '+arc1x+','+arc1y+' z').toBack()
+                    var a2 = paper.path('M'+positionX+','+(positionY+altura)+' h'+radio+' a'+radio+','+radio+' 0 '+laflag+',0 '+arc1x+','+arc1y+' z').toBack()
                         .attr({fill: -rot[i]+'-#999-'+color,'stroke':'none'})
                         .animate({'transform':'r'+rot[i]+' '+positionX+','+(positionY+altura)},1000);
+                     if( !(rot[i] < -270 && rot[i] > -360) ){
+                            a2.toBack();
+
+                        }else{
+                            st[i-1][0].toFront();
+                            st[i-1][3].toFront();
+                        }
                     //-->
                     st.push(paper.setFinish());
                     st[i].data('index',i);
@@ -86,7 +104,7 @@
                             var anguloMove = rot[index]+(angulo[index]/2);
                             var increX = radio/10*Math.cos(anguloMove*Math.PI/180);
                             var increY = radio/10*Math.sin(anguloMove*Math.PI/180);
-                            st[index].attr({stroke:'#0B3200'});
+                            st[index].attr({stroke:'#0B3200','cursor':'pointer'});
                             st[index][0].animate({'transform':'t'+increX+','+increY+' r'+rot[index]+' '+positionX+','+positionY},500);
                             st[index][1].animate({'transform':'t'+increX+','+increY},500);
                             st[index][2].animate({'transform':'t'+increX+','+increY},500);
@@ -95,7 +113,7 @@
                         },
                         function(){
                             var index = this.data('index');
-                            st[index].attr({stroke:'none'});
+                            st[index].attr({stroke:'none','cursor':'default'});
                             st[index][0].animate({'transform':'t0,0 r'+rot[index]+' '+positionX+','+positionY},500);
                             st[index][1].animate({'transform':'t0,0'},500);
                             st[index][2].animate({'transform':'t0,0'},500);
@@ -108,22 +126,50 @@
                 }
             }
             i = 0;
-            for(var property in options){
+            for(var property in options ){
                 if(options.hasOwnProperty(property)){
                     color = options[property].color;
                     //Caja de texto
                     var anguloMove = rot[i]+(angulo[i]/2);
-                    var increX = positionX+radio/1.2*Math.cos(anguloMove*Math.PI/180);
-                    var increY = positionY+radio/1.2*Math.sin(anguloMove*Math.PI/180);
-                    caja.push(paper.rect(increX,increY,100,100,10));
-                    caja[i].attr({fill:color,'stroke':'none','opacity':0})
-                        .toFront();
-                    st[i].hover(function(){
+                    var incrementX = radio/1.2*Math.cos(anguloMove*Math.PI/180);
+                    var incrementY = radio/1.2*Math.sin(anguloMove*Math.PI/180);
+                    var increX = positionX+incrementX;
+                    var increY = positionY+incrementY;
+                    var rect = radio/2;
+                    caja.push(paper.rect(increX,increY,rect,rect,10));
+                    caja[i].attr({fill:color,'stroke':'none','opacity':0,transform:'t-'+rect/2+',-'+rect/2})
+                        .toFront()
+                        .data('index',i);
+                    caja[i].hover(function(){
                             var index = this.data('index');
-                            caja[index].animate({opacity:1},2000)
+                            caja[index].animate({opacity:1},1000);
+
+                            var anguloMove = rot[index]+(angulo[index]/2);
+                            var increX = radio/10*Math.cos(anguloMove*Math.PI/180);
+                            var increY = radio/10*Math.sin(anguloMove*Math.PI/180);
+                            st[index].attr({stroke:'#0B3200','cursor':'pointer'});
+                            st[index][0].animate({'transform':'t'+increX+','+increY+' r'+rot[index]+' '+positionX+','+positionY},500);
+                            st[index][1].animate({'transform':'t'+increX+','+increY},500);
+                            st[index][2].animate({'transform':'t'+increX+','+increY},500);
+                            st[index][3].animate({'transform':'t'+increX+','+increY},500);
+                            st[index][4].animate({'transform':'t'+increX+','+increY+' r'+rot[index]+' '+positionX+','+(positionY+altura)},500);
                         },function(){
                             var index = this.data('index');
-                            caja[index].animate({opacity:0},2000)
+                            caja[index].animate({opacity:0},1000);
+
+                            st[index].attr({stroke:'none','cursor':'default'});
+                            st[index][0].animate({'transform':'t0,0 r'+rot[index]+' '+positionX+','+positionY},500);
+                            st[index][1].animate({'transform':'t0,0'},500);
+                            st[index][2].animate({'transform':'t0,0'},500);
+                            st[index][3].animate({'transform':'t0,0'},500);
+                            st[index][4].animate({'transform':'t0,0 r'+rot[index]+' '+positionX+','+(positionY+altura)},500);
+                        });    
+                    st[i].hover(function(){
+                            var index = this.data('index');
+                            caja[index].animate({opacity:1},1000);
+                        },function(){
+                            var index = this.data('index');
+                            caja[index].animate({opacity:0},1000);
                         });
                 i++;
                 }
@@ -133,13 +179,13 @@
             quesito1:{
                 title:'PP',
                 desc:'Partido Popular',
-                porcentaje:20,
+                porcentaje:10,
                 color:'#fff333'
             },
             quesito2:{
                 title:'PSOE',
                 desc:'Partido Socialista obrero español',
-                porcentaje:50,
+                porcentaje:60,
                 color:'#333'
             },
             quesito3:{
