@@ -56,9 +56,6 @@
                     //Rectas
                     var r1 = paper.path('M'+positionX+','+positionY+' v'+altura+' l'+var1x+','+var1y+' v-'+altura+' z')
                         .attr({fill: -rot[i]+'-#888-'+color,'stroke':'none'});
-                        if( !(rot[i] < -270 && rot[i] > -360) ){
-                            r1.toBack();
-                        }
                     var r2 = paper.path('M'+positionX+','+positionY+' v'+altura+' l'+var2x+','+var2y+'v-'+altura+' z')
                         .attr({fill: -rot[i]+'-#888-'+color,'stroke':'none'});
                     //-->
@@ -88,13 +85,6 @@
                     var a2 = paper.path('M'+positionX+','+(positionY+altura)+' h'+radio+' a'+radio+','+radio+' 0 '+laflag+',0 '+arc1x+','+arc1y+' z').toBack()
                         .attr({fill: -rot[i]+'-#999-'+color,'stroke':'none'})
                         .animate({'transform':'r'+rot[i]+' '+positionX+','+(positionY+altura)},1000);
-                     if( !(rot[i] < -270 && rot[i] > -360) ){
-                            a2.toBack();
-
-                        }else{
-                            st[i-1][0].toFront();
-                            st[i-1][3].toFront();
-                        }
                     //-->
                     st.push(paper.setFinish());
                     st[i].data('index',i);
@@ -120,10 +110,25 @@
                             st[index][3].animate({'transform':'t0,0'},500);
                             st[index][4].animate({'transform':'t0,0 r'+rot[index]+' '+positionX+','+(positionY+altura)},500);
                     });
+    
+                    if(rot[i] < 0 && rot[i] > -180){
+                        if(st[i-1])st[i][1].insertBefore(st[i-1][1]);
+                    }else if( rot[i] < -270 && rot[i] > -360 ){
+                        st[i][1].insertBefore(st[i-1][1]);
+                    }else if(rot[i] < -180 && rot[i] > -270){
+                        st[i][1].insertBefore(st[i][0]);
+                    }
 
                     rot.push(rot[i]+angulo[i]);
                     i++;
                 }
+            }
+            i=0;
+            for(var index in st){
+                if(st[index]){
+                    st[index][0].toFront();
+                }
+                i++;
             }
             i = 0;
             for(var property in options ){
@@ -179,13 +184,13 @@
             quesito1:{
                 title:'PP',
                 desc:'Partido Popular',
-                porcentaje:10,
+                porcentaje:30,
                 color:'#fff333'
             },
             quesito2:{
                 title:'PSOE',
                 desc:'Partido Socialista obrero español',
-                porcentaje:60,
+                porcentaje:20,
                 color:'#333'
             },
             quesito3:{
@@ -195,9 +200,15 @@
                 color:'#555fff'
             },
             quesito4:{
+                title:'UPyD',
+                desc:'Unión Partido y Democracia',
+                porcentaje:5,
+                color:'#533f22'
+            },
+            quesito5:{
                 title:'BILDU',
                 desc:'Partido de los Vascos',
-                porcentaje:15,
+                porcentaje:30,
                 color:'#f321ab'
             }
         });
